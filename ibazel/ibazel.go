@@ -277,13 +277,13 @@ func (i *IBazel) iteration(command string, commandToRun runnableCommand, targets
 	case WAIT:
 		select {
 		case e := <-i.sourceEventHandler.SourceFileEvents:
-			if _, ok := i.filesWatched[i.sourceFileWatcher][e.Name]; ok && e.Op&modifyingEvents != 0 {
+			if _, ok := i.filesWatched[i.sourceFileWatcher][e.Name]; ok /* && e.Op&modifyingEvents != 0 */ {
 				fmt.Fprintf(os.Stderr, "\nChanged: %q. Rebuilding...\n", e.Name)
 				i.changeDetected(targets, "source", e.Name)
 				i.state = DEBOUNCE_RUN
 			}
 		case e := <-i.buildFileWatcher.Events():
-			if _, ok := i.filesWatched[i.buildFileWatcher][e.Name]; ok && e.Op&modifyingEvents != 0 {
+			if _, ok := i.filesWatched[i.buildFileWatcher][e.Name]; ok /* && e.Op&modifyingEvents != 0 */ {
 				fmt.Fprintf(os.Stderr, "\nBuild graph changed: %q. Requerying...\n", e.Name)
 				i.changeDetected(targets, "graph", e.Name)
 				i.state = DEBOUNCE_QUERY
@@ -292,7 +292,7 @@ func (i *IBazel) iteration(command string, commandToRun runnableCommand, targets
 	case DEBOUNCE_QUERY:
 		select {
 		case e := <-i.buildFileWatcher.Events():
-			if _, ok := i.filesWatched[i.buildFileWatcher][e.Name]; ok && e.Op&modifyingEvents != 0 {
+			if _, ok := i.filesWatched[i.buildFileWatcher][e.Name]; ok /* && e.Op&modifyingEvents != 0 */ {
 				i.changeDetected(targets, "graph", e.Name)
 			}
 			i.state = DEBOUNCE_QUERY
@@ -308,7 +308,7 @@ func (i *IBazel) iteration(command string, commandToRun runnableCommand, targets
 	case DEBOUNCE_RUN:
 		select {
 		case e := <-i.sourceEventHandler.SourceFileEvents:
-			if _, ok := i.filesWatched[i.sourceFileWatcher][e.Name]; ok && e.Op&modifyingEvents != 0 {
+			if _, ok := i.filesWatched[i.sourceFileWatcher][e.Name]; ok /* && e.Op&modifyingEvents != 0 */ {
 				i.changeDetected(targets, "source", e.Name)
 			}
 			i.state = DEBOUNCE_RUN
