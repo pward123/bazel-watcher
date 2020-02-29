@@ -1,3 +1,6 @@
+# DEPRECATED
+I ended up needing further customizations to watcher and after analyzing this application it was easier for me to reimplement using nodejs than modify the golang.
+
 # Bazel watcher
 
 [![Build status](https://badge.buildkite.com/7694a2e22dcb7ea2e2ec80bb7e8e0380c700079e761394096f.svg?branch=master)](https://buildkite.com/bazel/bazel-watcher-postsubmit)
